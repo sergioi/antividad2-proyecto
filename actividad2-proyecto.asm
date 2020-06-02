@@ -153,17 +153,86 @@ continuar_resta:
 
 
 ;-----------------------------------------
-;PARA LA MULTIPLICACION    (aqui pegas  y borras todo del parentesis)
+;PARA LA MULTIPLICACION
 multiplicar:
   
-  
+  mov dx,0700h
+    call cursor
+    call num1
+    call entrada_num1
+    cmp actlon1,2
+    je dos_digitos1
+    mov bl,numero1
+    sub bl,30h
+c7:
+    mov dx,0800h
+    call cursor
+    call num2
+    call entrada_num2
+    cmp actlon2,2
+    je dos_digitos2
+    mov cl,numero2
+    sub cl,30h
+c8:
+    mov dx,0900h
+    call cursor
+    mov ax,0000
+    mov al,bl
+    mov bl,cl
+    div bl
+    mov bx,ax
+    mov ch,cl
+    call mostrar3
+    cmp bh,0
+    jne decimales
+sin_decimales:
+    call pausa
 
 ;-----------------------------------------
-;PARA LA DIVISION (aqui pegas dividir y borras todo del parentesis)
-dividir:
+;PARA LA DIVISION
    
-   
-   
+  dividir:
+
+   mostrar3 proc near
+    mov ah,00h
+    mov al,bl
+    mov cl,0ah
+    div cl
+    add ah,30h
+    mov msj4[35],ah
+    mov ah,09h
+    add al,30h
+    mov msj4[34],al
+    lea dx,msj4
+    int 21h
+    ret
+mostrar3 endp
+
+mostrar4 proc near
+    mov ax,bx
+    mov cl,64h
+    div cl
+    mov cl,0ah
+    mov bx,ax
+    mov ax,0000h
+    mov al,bh
+    div cl
+    add ah,30h
+    mov msj4[37],ah
+    add al,30h
+    mov msj4[36],al
+    mov ax,0000h
+    mov al,bl
+    div cl
+    add ah,30h
+    mov msj4[35],ah
+    add al,30h
+    mov msj4[34],al
+    mov ah,09h
+    lea dx,msj4
+    int 21h
+    ret
+mostrar4 endp
    
 ;CUANDO EXISTAN DECIMALES
 decimales:
